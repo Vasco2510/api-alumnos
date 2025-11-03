@@ -4,8 +4,14 @@ import json
 def lambda_handler(event, context):
     print("Event recibido:", json.dumps(event))
     
-    # Obtener parámetros del body (CORREGIDO para Serverless)
-    body = json.loads(event.get('body', '{}'))
+    # ✅ CORREGIDO para Lambda Proxy Integration
+    # En Proxy Integration, event['body'] ya es un string JSON
+    if isinstance(event.get('body'), dict):
+        body = event['body']
+    else:
+        # Si viene como string, hacer parsing
+        body = json.loads(event.get('body', '{}'))
+    
     tenant_id = body.get('tenant_id')
     alumno_id = body.get('alumno_id')
     alumno_datos = body.get('alumno_datos')
@@ -29,17 +35,26 @@ def lambda_handler(event, context):
         'alumno_id': alumno_id,
         'alumno_datos': alumno_datos
     }
-    response = table.put_item(Item=alumno)
     
-    # Salida (json)
-    return {
-        'statusCode': 200,
-        'headers': {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*'
-        },
-        'body': json.dumps({
-            'mensaje': 'Alumno creado exitosamente',
-            'alumno': alumno
-        })
-    }
+    try:
+        response = table.put_item(Item=alumno)
+        return {
+            'statusCode': 200,
+            'headers': {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*'
+            },
+            'body': json.dumps({
+                'mensaje': 'Alumno creado exitosamente',
+                'alumno': alumno
+            })
+        }
+    except Exception as e:
+        return {
+            'statusCode': 500,
+            'headers': {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*'
+            },
+            'body': json.dumps({'error': str(e)})
+        }
