@@ -3,8 +3,9 @@ service: api-alumnos
 
 provider:
   name: aws
-  runtime: python3.12
-  timeout: 30
+  runtime: python3.13
+  memorySize: 256
+  timeout: 20
   iam:
     role: arn:aws:iam::535557349201:role/LabRole
 
@@ -16,8 +17,8 @@ functions:
           path: /alumnos/listar
           method: post
           cors: true
-          # ← QUITAR 'integration: lambda' (usa Proxy por defecto)
-  
+          integration: lambda-proxy  # ✅ CAMBIADO
+
   crear:
     handler: CrearAlumno.lambda_handler
     events:
@@ -25,8 +26,8 @@ functions:
           path: /alumnos/crear
           method: post
           cors: true
-          # ← QUITAR 'integration: lambda'
-  
+          integration: lambda-proxy  # ✅ CAMBIADO
+
   buscar:
     handler: BuscarAlumno.lambda_handler
     events:
@@ -34,8 +35,8 @@ functions:
           path: /alumnos/buscar
           method: post
           cors: true
-          # ← QUITAR 'integration: lambda'
-  
+          integration: lambda-proxy  # ✅ CAMBIADO
+
   modificar:
     handler: ModificarAlumno.lambda_handler
     events:
@@ -43,8 +44,8 @@ functions:
           path: /alumnos/modificar
           method: put
           cors: true
-          # ← QUITAR 'integration: lambda'
-  
+          integration: lambda-proxy  # ✅ CAMBIADO
+
   eliminar:
     handler: EliminarAlumno.lambda_handler
     events:
@@ -52,4 +53,4 @@ functions:
           path: /alumnos/eliminar
           method: delete
           cors: true
-          # ← QUITAR 'integration: lambda'
+          integration: lambda-proxy  # ✅ CAMBIADO
