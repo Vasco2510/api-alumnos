@@ -16,7 +16,8 @@ functions:
           path: /alumnos/listar
           method: post
           cors: true
-          integration: lambda
+          # ← QUITAR 'integration: lambda' (usa Proxy por defecto)
+  
   crear:
     handler: CrearAlumno.lambda_handler
     events:
@@ -24,4 +25,31 @@ functions:
           path: /alumnos/crear
           method: post
           cors: true
-          integration: lambda
+          # ← QUITAR 'integration: lambda'
+  
+  buscar:
+    handler: BuscarAlumno.lambda_handler
+    events:
+      - http:
+          path: /alumnos/buscar
+          method: post
+          cors: true
+          # ← QUITAR 'integration: lambda'
+  
+  modificar:
+    handler: ModificarAlumno.lambda_handler
+    events:
+      - http:
+          path: /alumnos/modificar
+          method: put
+          cors: true
+          # ← QUITAR 'integration: lambda'
+  
+  eliminar:
+    handler: EliminarAlumno.lambda_handler
+    events:
+      - http:
+          path: /alumnos/eliminar
+          method: delete
+          cors: true
+          # ← QUITAR 'integration: lambda'
