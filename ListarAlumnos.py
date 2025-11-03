@@ -1,10 +1,24 @@
-import boto3  # import Boto3
-from boto3.dynamodb.conditions import Key  # import Boto3 conditions
+import boto3
+import json
+from boto3.dynamodb.conditions import Key
 
 def lambda_handler(event, context):
-    # Entrada (json)
-    print(event)
-    tenant_id = event['body']['tenant_id']
+    print("Event recibido:", json.dumps(event))
+    
+    # Obtener tenant_id del body
+    body = json.loads(event.get('body', '{}'))
+    tenant_id = body.get('tenant_id')
+    
+    if not tenant_id:
+        return {
+            'statusCode': 400,
+            'headers': {
+                'Content-Type': 'application/json', 
+                'Access-Control-Allow-Origin': '*'
+            },
+            'body': json.dumps({'error': 'tenant_id es requerido'})
+        }
+    
     # Proceso
     dynamodb = boto3.resource('dynamodb')
     table = dynamodb.Table('t_alumnos')
@@ -13,11 +27,17 @@ def lambda_handler(event, context):
     )
     items = response['Items']
     num_reg = response['Count']
-    print(items)
+    
     # Salida (json)
     return {
         'statusCode': 200,
-        'tenant_id':tenant_id,
-        'num_reg': num_reg,
-        'alumnos': items
+        'headers': {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*'
+        },
+        'body': json.dumps({
+            'tenant_id': tenant_id,
+            'num_reg': num_reg,
+            'alumnos': items
+        })
     }
