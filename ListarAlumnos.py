@@ -5,8 +5,16 @@ from boto3.dynamodb.conditions import Key
 def lambda_handler(event, context):
     print("Event recibido:", json.dumps(event))
     
-    # Obtener tenant_id del body
-    body = json.loads(event.get('body', '{}'))
+    # ✅ CORREGIDO: Manejar body que puede venir como dict o string
+    body = event.get('body', {})
+    
+    # Si body es string, convertirlo a dict
+    if isinstance(body, str):
+        try:
+            body = json.loads(body)
+        except json.JSONDecodeError:
+            body = {}
+    
     tenant_id = body.get('tenant_id')
     
     if not tenant_id:

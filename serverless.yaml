@@ -17,7 +17,7 @@ functions:
           path: /alumnos/listar
           method: post
           cors: true
-          integration: lambda
+          integration: lambda-proxy # ✅ CAMBIADO
 
   crear:
     handler: CrearAlumno.lambda_handler
@@ -26,7 +26,7 @@ functions:
           path: /alumnos/crear
           method: post
           cors: true
-          integration: lambda
+          integration: lambda-proxy # ✅ CAMBIADO
 
   buscar:
     handler: BuscarAlumno.lambda_handler
@@ -35,7 +35,7 @@ functions:
           path: /alumnos/buscar
           method: post
           cors: true
-          integration: lambda
+          integration: lambda-proxy # ✅ CAMBIADO
 
   modificar:
     handler: ModificarAlumno.lambda_handler
@@ -44,7 +44,7 @@ functions:
           path: /alumnos/modificar
           method: put
           cors: true
-          integration: lambda
+          integration: lambda-proxy # ✅ CAMBIADO
 
   eliminar:
     handler: EliminarAlumno.lambda_handler
@@ -53,4 +53,4 @@ functions:
           path: /alumnos/eliminar
           method: delete
           cors: true
-          integration: lambda
+          integration: lambda-proxy # ✅ CAMBIADO

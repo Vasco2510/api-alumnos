@@ -4,8 +4,11 @@ import json
 def lambda_handler(event, context):
     print("Event recibido:", json.dumps(event))
     
-    # Obtener parámetros del body
-    body = json.loads(event.get('body', '{}'))
+    # ✅ CORREGIDO: Manejar body que puede venir como dict o string
+    body = event.get('body', {})
+    if isinstance(body, str):
+        body = json.loads(body)
+    
     tenant_id = body.get('tenant_id')
     alumno_id = body.get('alumno_id')
     
